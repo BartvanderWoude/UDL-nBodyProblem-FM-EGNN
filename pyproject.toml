@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nbody_fm"
+version = "0.0.1"
+dependencies = [
+    "flow-matching",
+    "egnn-pytorch",
+    "pandas"
+]
+requires-python = ">=3.9"
+authors = [
+  {name = "Tim", email = "tim@example.com"},
+  {name = "Bart", email = "bart@example.com"}
+]
+description = "Implementation for the UDL project to implement EGNN with FM for n-body simulations."
+readme = "README.md"
+keywords = ["UDL", "EGNN", "FM"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python"
+]
+
+[project.urls]
+Repository = "https://github.com/me/spam.git"
