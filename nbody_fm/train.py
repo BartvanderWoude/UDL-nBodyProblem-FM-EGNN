@@ -22,7 +22,7 @@ def train(vf, dataloader, loss_fn, nepochs, lr):
             vel_sample = path.sample(t=t, x_0=vel_0, x_1=vel_1)
             t = t.unsqueeze(-1).unsqueeze(-1).repeat(1, x_0.shape[1], 1)
 
-            pred_t, pred_x, pred_vel = vf(t=t, coors=coors_sample.x_t, vel=vel_sample.x_t)
+            pred_x, pred_vel = vf(t=t, coors=coors_sample.x_t, vel=vel_sample.x_t)
             loss = loss_fn(pred_x, coors_sample.dx_t) + loss_fn(pred_vel, vel_sample.dx_t)
 
             loss.backward()
