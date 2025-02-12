@@ -1,4 +1,4 @@
-from nbody_fm import CoorsWrappedModel, VelWrappedModel
+from nbody_fm.model import CoorsWrappedModel, VelWrappedModel
 
 from tqdm import tqdm
 from flow_matching.solver import ODESolver
@@ -19,12 +19,15 @@ def infer(vf, dataset, inference_method, inference_steps, output_file, step_size
 
     for i in tqdm(range(inference_steps)):
         if i % look_ahead == 0:
-            x_0, vel_0, x_1, vel_1 = dataset[i]
+            x_0, vel_0, _, _ = dataset[i]
             x_0 = x_0.unsqueeze(0)
             vel_0 = vel_0.unsqueeze(0)
 
-        x_0 = coors_solver.sample(x_init=x_0, step_size=step_size, method=inference_method, vel=vel_0)
-        vel_0 = vel_solver.sample(x_init=vel_0, step_size=step_size, method=inference_method, coors=x_0)
+        out_x = coors_solver.sample(x_init=x_0, step_size=step_size, method=inference_method, vel=vel_0)
+        out_vel = vel_solver.sample(x_init=vel_0, step_size=step_size, method=inference_method, coors=x_0)
+
+        x_0 = out_x
+        vel_0 = out_vel
 
         output = f"{x_0[0, 0, 0].item()},{x_0[0, 0, 1].item()},"
         output += f"{x_0[0, 1, 0].item()},{x_0[0, 1, 1].item()},"

@@ -5,18 +5,22 @@ from flow_matching.utils import ModelWrapper
 
 
 class EGNN_network(torch.nn.Module):
-    def __init__(self, number_of_layers=3, use_time_embedding=False, feature_dim=3):
+    def __init__(self, number_of_layers=2, use_time_embedding=False, feature_dim=3, number_of_nodes=3):
         super(EGNN_network, self).__init__()
         self.number_of_layers = number_of_layers
         self.use_time_embedding = use_time_embedding
         self.time_dim = 1
         self.feature_dim = feature_dim
 
+        self.base_edges = torch.ones(1, number_of_nodes, number_of_nodes, 1)
+        self.edges = None
+
         if self.use_time_embedding:
             self.time_embedding = torch.nn.Sequential(
-                torch.nn.Linear(self.time_dim, 2*feature_dim),
+                torch.nn.Linear(self.time_dim, 2 * feature_dim),
                 torch.nn.ReLU(),
-                torch.nn.Linear(2*feature_dim, feature_dim)
+                torch.nn.Dropout(0.2),
+                torch.nn.Linear(2 * feature_dim, feature_dim)
             )
         GNN_layers = [EGNN_layer(feature_dim=feature_dim) for _ in range(number_of_layers)]
         self.layers = torch.nn.ModuleList(GNN_layers)
@@ -29,24 +33,27 @@ class EGNN_network(torch.nn.Module):
         elif self.time_dim > 1:
             raise ValueError("Cannot handle time_dim > 1 without time_embedding")
 
+        if self.edges is None or coors.shape[0] != self.edges.shape[0]:
+            self.edges = self.base_edges.repeat(coors.shape[0], 1, 1, 1)
+
         for layer in self.layers:
-            _, coors, vel = layer(feats=t, coors=coors, vel=vel)
+            _, coors, vel = layer(feats=t, coors=coors, vel=vel, edges=self.edges)
 
         return coors, vel
 
 
 class EGNN_layer(torch.nn.Module):
-    def __init__(self, feature_dim=3):
+    def __init__(self, feature_dim=3, edge_dim=1):
         super(EGNN_layer, self).__init__()
-        self.egnn = EGNN(dim=feature_dim, update_vel=True)
+        self.egnn = EGNN(dim=feature_dim, edge_dim=edge_dim, update_vel=True)
 
         self.activation = torch.nn.SELU()
 
         self.linear_coors = torch.nn.Linear(2, 2)
         self.linear_vel = torch.nn.Linear(2, 2)
 
-    def forward(self, feats, coors, vel):
-        t, coors, vel = self.egnn(feats=feats, coors=coors, vel=vel)
+    def forward(self, feats, coors, vel, edges):
+        t, coors, vel = self.egnn(feats=feats, coors=coors, vel=vel, edges=edges)
 
         coors = self.activation(coors)
         vel = self.activation(vel)
@@ -61,7 +68,7 @@ class CoorsWrappedModel(ModelWrapper):
     def forward(self, x: torch.Tensor, t: torch.Tensor, **extras):
         vel = extras["vel"]
         t = t.unsqueeze(-1).unsqueeze(-1).repeat(1, x.shape[1], self.model.time_dim)
-        pred_x, pred_vel = self.model(t=t, coors=x, vel=vel)
+        pred_x, _ = self.model(t=t, coors=x, vel=vel)
 
         return pred_x
 
@@ -70,5 +77,5 @@ class VelWrappedModel(ModelWrapper):
     def forward(self, x: torch.Tensor, t: torch.Tensor, **extras):
         coors = extras["coors"]
         t = t.unsqueeze(-1).unsqueeze(-1).repeat(1, x.shape[1], self.model.time_dim)
-        pred_x, pred_vel = self.model(t=t, coors=coors, vel=x)
+        _, pred_vel = self.model(t=t, coors=coors, vel=x)
         return pred_vel

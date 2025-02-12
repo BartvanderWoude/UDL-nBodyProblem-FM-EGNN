@@ -13,7 +13,7 @@ DATAFILE = "3body_2d_data.csv"
 # Non-adaptive: "euler", "rk2", "rk4" || Adaptive: "dopri8", "dopri5", "bosh3", "fehlberg2", "adaptive_heun"
 INFERENCE_METHOD = "dopri5"
 SOLVER_STEP_SIZE = 0.01  # Only necessary when ODE solver is not adaptive
-INFERENCE_STEPS = 50
+INFERENCE_STEPS = 100
 LOOK_AHEAD = 1
 OUTPUT_FILE = "inferred.csv"
 SAVED_MODEL = "model.pth"
