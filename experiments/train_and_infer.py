@@ -10,10 +10,13 @@ BATCH_SIZE = 256
 LEARNING_RATE = 1e-3
 DATAFILE = "3body_2d_data.csv"
 
+# Non-adaptive: "euler", "rk2", "rk4" || Adaptive: "dopri8", "dopri5", "bosh3", "fehlberg2", "adaptive_heun"
+INFERENCE_METHOD = "dopri5"
+SOLVER_STEP_SIZE = 0.01  # Only necessary when ODE solver is not adaptive
 INFERENCE_STEPS = 50
-SOLVER_STEP_SIZE = 0.01
 LOOK_AHEAD = 1
 OUTPUT_FILE = "inferred.csv"
+SAVED_MODEL = "model.pth"
 
 
 def run():
@@ -30,11 +33,11 @@ def run():
                nepochs=NEPOCHS,
                lr=LEARNING_RATE)
 
-    torch.save(vf.state_dict(), "model.pth")
+    torch.save(vf.state_dict(), SAVED_MODEL)
 
     infer(vf=vf,
           dataset=dataset,
-          inference_method="dopri5",
+          inference_method=INFERENCE_METHOD,
           inference_steps=INFERENCE_STEPS,
           output_file=OUTPUT_FILE,
           step_size=SOLVER_STEP_SIZE,
