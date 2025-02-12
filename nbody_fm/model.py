@@ -39,12 +39,21 @@ class EGNN_layer(torch.nn.Module):
     def __init__(self, feature_dim=3):
         super(EGNN_layer, self).__init__()
         self.egnn = EGNN(dim=feature_dim, update_vel=True)
-        self.activation = torch.nn.ReLU()
+
+        self.activation = torch.nn.SELU()
+
+        self.linear_coors = torch.nn.Linear(2, 2)
+        self.linear_vel = torch.nn.Linear(2, 2)
 
     def forward(self, feats, coors, vel):
         t, coors, vel = self.egnn(feats=feats, coors=coors, vel=vel)
-        # coors = self.activation(coors)
-        # vel = self.activation(vel)
+
+        coors = self.activation(coors)
+        vel = self.activation(vel)
+
+        coors = self.linear_coors(coors)
+        vel = self.linear_vel(vel)
+
         return t, coors, vel
 
 
