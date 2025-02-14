@@ -49,8 +49,8 @@ class EGNN_layer(torch.nn.Module):
 
         self.activation = torch.nn.SELU()
 
-        self.linear_coors = torch.nn.Linear(2, 2)
-        self.linear_vel = torch.nn.Linear(2, 2)
+        # self.linear_coors = torch.nn.Linear(2, 2)
+        # self.linear_vel = torch.nn.Linear(2, 2)
 
     def forward(self, feats, coors, vel, edges):
         t, coors, vel = self.egnn(feats=feats, coors=coors, vel=vel, edges=edges)
@@ -58,8 +58,8 @@ class EGNN_layer(torch.nn.Module):
         coors = self.activation(coors)
         vel = self.activation(vel)
 
-        coors = self.linear_coors(coors)
-        vel = self.linear_vel(vel)
+        # coors = self.linear_coors(coors)
+        # vel = self.linear_vel(vel)
 
         return t, coors, vel
 
@@ -79,3 +79,10 @@ class VelWrappedModel(ModelWrapper):
         t = t.unsqueeze(-1).unsqueeze(-1).repeat(1, x.shape[1], self.model.time_dim)
         _, pred_vel = self.model(t=t, coors=coors, vel=x)
         return pred_vel
+
+
+class SolverWrappedModel(ModelWrapper):
+    def forward(self, x: torch.Tensor, t: torch.Tensor, **extras):
+        t = t.unsqueeze(-1).unsqueeze(-1).repeat(1, x.shape[1], self.model.time_dim)
+        pred_x, pred_vel = self.model(t=t, coors=x[0], vel=x[1])
+        return torch.vstack((pred_x, pred_vel))
