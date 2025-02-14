@@ -7,11 +7,14 @@
 # feature_dim: 4
 # beta: 0.5, 0.7
 
+# Test
+python train.py --nepochs 1 --batch_size 128 --lr 0.001 --feature_dim 4 --beta 0.5
+
 # UDL1
-python train.py --nepochs 12 --batch_size 32 --lr 0.001 --feature_dim 4 --beta 0.5
-python train.py --nepochs 12 --batch_size 32 --lr 0.001 --feature_dim 4 --beta 0.7
-python train.py --nepochs 12 --batch_size 32 --lr 0.0001 --feature_dim 4 --beta 0.5
-python train.py --nepochs 12 --batch_size 32 --lr 0.0001 --feature_dim 4 --beta 0.7
+# python train.py --nepochs 12 --batch_size 32 --lr 0.001 --feature_dim 4 --beta 0.5
+# python train.py --nepochs 12 --batch_size 32 --lr 0.001 --feature_dim 4 --beta 0.7
+# python train.py --nepochs 12 --batch_size 32 --lr 0.0001 --feature_dim 4 --beta 0.5
+# python train.py --nepochs 12 --batch_size 32 --lr 0.0001 --feature_dim 4 --beta 0.7
 
 # UDL2
 # python train.py --nepochs 12 --batch_size 64 --lr 0.001 --feature_dim 4 --beta 0.5
