@@ -4,13 +4,18 @@ from tqdm import tqdm
 from flow_matching.path.scheduler import CondOTScheduler
 from flow_matching.path import AffineProbPath
 
+import copy
 
-def train(vf, traindataloader, valdataloader, loss_fn, nepochs, lr, beta, loss_file_name, val_file_name):
+
+def train(vf, traindataloader, valdataloader, loss_fn, nepochs, lr, beta, loss_file_name, val_file_name, t_mult=8):
     path = AffineProbPath(scheduler=CondOTScheduler())
     optim = torch.optim.Adam(vf.parameters(), lr=lr)
 
     loss_file = open("losses/" + loss_file_name, "w", encoding="utf-8")
     val_file = open("losses/" + val_file_name, "w", encoding="utf-8")
+
+    lowest_val_loss = float("inf")
+    best_model = copy.deepcopy(vf)
 
     for epoch in range(nepochs):
         total_loss = 0.0
@@ -22,7 +27,12 @@ def train(vf, traindataloader, valdataloader, loss_fn, nepochs, lr, beta, loss_f
 
             optim.zero_grad()
 
-            t = torch.rand(x_0.shape[0])
+            t = torch.rand(x_0.shape[0] * t_mult)
+
+            x_0 = x_0.repeat(t_mult, 1, 1)
+            vel_0 = vel_0.repeat(t_mult, 1, 1)
+            x_1 = x_1.repeat(t_mult, 1, 1)
+            vel_1 = vel_1.repeat(t_mult, 1, 1)
 
             coors_sample = path.sample(t=t, x_0=x_0, x_1=x_1)
             vel_sample = path.sample(t=t, x_0=vel_0, x_1=vel_1)
@@ -52,7 +62,12 @@ def train(vf, traindataloader, valdataloader, loss_fn, nepochs, lr, beta, loss_f
             for data in valdataloader:
                 x_0, vel_0, x_1, vel_1 = data
 
-                t = torch.rand(x_0.shape[0])
+                t = torch.rand(x_0.shape[0] * t_mult)
+
+                x_0 = x_0.repeat(t_mult, 1, 1)
+                vel_0 = vel_0.repeat(t_mult, 1, 1)
+                x_1 = x_1.repeat(t_mult, 1, 1)
+                vel_1 = vel_1.repeat(t_mult, 1, 1)
 
                 coors_sample = path.sample(t=t, x_0=x_0, x_1=x_1)
                 vel_sample = path.sample(t=t, x_0=vel_0, x_1=vel_1)
@@ -72,7 +87,10 @@ def train(vf, traindataloader, valdataloader, loss_fn, nepochs, lr, beta, loss_f
         print(
             f"Validation epoch: {epoch}, Pos Loss: {pos_loss / len(valdataloader)}, Vel Loss: {vel_loss / len(valdataloader)}, Total loss: {total_loss / len(valdataloader)}")
 
+        if total_loss < lowest_val_loss:
+            lowest_val_loss = total_loss
+            best_model = copy.deepcopy(vf)
     loss_file.close()
     val_file.close()
 
-    return vf
+    return vf, best_model

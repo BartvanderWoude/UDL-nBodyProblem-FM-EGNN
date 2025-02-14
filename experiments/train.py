@@ -49,6 +49,7 @@ INFERENCE_STEPS = 7000
 LOOK_AHEAD = 7000
 
 dataset = NBodyData(DATAFILE)
+# dataset = Subset(dataset, range(1000))  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!REMOVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 traindata_index = int(0.7 * len(dataset))
 valdata_index = int(0.85 * len(dataset))
 
@@ -65,14 +66,15 @@ vf = EGNN_network(number_of_layers=NUMBER_OF_LAYERS,
                   use_time_embedding=USE_TIME_EMBEDDING,
                   feature_dim=FEATURE_DIM)
 
-vf = train(vf=vf,
-           traindataloader=traindataloader,
-           valdataloader=valdataloader,
-           loss_fn=loss_fn,
-           nepochs=NEPOCHS,
-           lr=LEARNING_RATE,
-           beta=BETA,
-           loss_file_name=LOSS_FILE,
-           val_file_name=VAL_FILE)
+vf, best = train(vf=vf,
+                 traindataloader=traindataloader,
+                 valdataloader=valdataloader,
+                 loss_fn=loss_fn,
+                 nepochs=NEPOCHS,
+                 lr=LEARNING_RATE,
+                 beta=BETA,
+                 loss_file_name=LOSS_FILE,
+                 val_file_name=VAL_FILE)
 
 torch.save(vf.state_dict(), "models/" + MODEL_FILE)
+torch.save(best.state_dict(), "models/" + "best_" + MODEL_FILE)
