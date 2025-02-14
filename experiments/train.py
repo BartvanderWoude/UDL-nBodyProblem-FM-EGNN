@@ -1,4 +1,4 @@
-from nbody_fm import NBodyData, EGNN_network, infer
+from nbody_fm import NBodyData, EGNN_network, train
 
 import torch
 import argparse
@@ -13,6 +13,7 @@ if not os.path.exists("losses"):
     os.makedirs("losses")
 if not os.path.exists("infer"):
     os.makedirs("infer")
+
 
 parser = argparse.ArgumentParser()
 
@@ -59,15 +60,19 @@ traindataloader = DataLoader(traindataset, batch_size=BATCH_SIZE, shuffle=True)
 valdataloader = DataLoader(valdataset, batch_size=BATCH_SIZE, shuffle=True)
 testdataloader = DataLoader(testdataset, batch_size=BATCH_SIZE, shuffle=True)
 
+loss_fn = torch.nn.MSELoss()
 vf = EGNN_network(number_of_layers=NUMBER_OF_LAYERS,
                   use_time_embedding=USE_TIME_EMBEDDING,
                   feature_dim=FEATURE_DIM)
-vf.load_state_dict(torch.load("models/" + MODEL_FILE))
 
-infer(vf=vf,
-      dataset=dataset,
-      inference_method=INFERENCE_METHOD,
-      inference_steps=INFERENCE_STEPS,
-      output_file=INFER_FILE,
-      step_size=SOLVER_STEP_SIZE,
-      look_ahead=LOOK_AHEAD)
+vf = train(vf=vf,
+           traindataloader=traindataloader,
+           valdataloader=valdataloader,
+           loss_fn=loss_fn,
+           nepochs=NEPOCHS,
+           lr=LEARNING_RATE,
+           beta=BETA,
+           loss_file_name=LOSS_FILE,
+           val_file_name=VAL_FILE)
+
+torch.save(vf.state_dict(), "models/" + MODEL_FILE)
