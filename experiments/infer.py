@@ -16,8 +16,8 @@ USE_TIME_EMBEDDING = True
 # Non-adaptive: "euler", "rk2", "rk4" || Adaptive: "dopri8", "dopri5", "bosh3", "fehlberg2", "adaptive_heun"
 INFERENCE_METHOD = "dopri5"
 SOLVER_STEP_SIZE = 0.01  # Only necessary when ODE solver is not adaptive
-INFERENCE_STEPS = 7000
-LOOK_AHEAD = 7000
+INFERENCE_STEPS = 4000
+LOOK_AHEAD = 20
 
 OUTPUT_FILE = "inferred.csv"
 SAVED_MODEL = "model.pth"
@@ -25,19 +25,11 @@ SAVED_MODEL = "model.pth"
 
 def run():
     dataset = NBodyData(DATAFILE)
-    dataloader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True)
-    loss_fn = torch.nn.MSELoss()
     vf = EGNN_network(number_of_layers=NUMBER_OF_LAYERS,
                       use_time_embedding=USE_TIME_EMBEDDING,
                       feature_dim=3)
 
-    vf = train(vf=vf,
-               dataloader=dataloader,
-               loss_fn=loss_fn,
-               nepochs=NEPOCHS,
-               lr=LEARNING_RATE)
-
-    torch.save(vf.state_dict(), SAVED_MODEL)
+    vf.load_state_dict(torch.load(SAVED_MODEL))
 
     infer(vf=vf,
           dataset=dataset,
