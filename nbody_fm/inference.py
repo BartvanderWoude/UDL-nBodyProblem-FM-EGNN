@@ -15,7 +15,7 @@ def infer(vf, dataset, inference_method, inference_steps, output_file, step_size
     coors_solver = ODESolver(velocity_model=coors_model)
     vel_solver = ODESolver(velocity_model=vel_model)
 
-    inferred = open(output_file, "w")
+    inferred = open("infer/" + output_file, "w", encoding="utf-8")
     idx = 0
 
     for i in tqdm(range(inference_steps)):
@@ -44,7 +44,7 @@ def infer_unified(vf, dataset, inference_method, inference_steps, output_file, s
 
     solver = ODESolver(velocity_model=vf)
 
-    inferred = open(output_file, "w")
+    inferred = open("infer/" + output_file, "w", encoding="utf-8")
     idx = 0
 
     for i in tqdm(range(inference_steps)):
