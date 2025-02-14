@@ -35,6 +35,6 @@ touch models/keep.txt
 touch losses/keep.txt
 touch infer/keep.txt
 
-cp models/* ../../data/UDL/models/
-cp losses/* ../../data/UDL/losses/
-cp infer/* ../../data/UDL/infer/
+cp models/* /data/UDL/models/
+cp losses/* /data/UDL/losses/
+cp infer/* /data/UDL/infer/
