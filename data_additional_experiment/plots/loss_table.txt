@@ -1,0 +1,28 @@
+\begin{table}[H]
+\centering
+\caption{Table showing the minimum training and validation loss of the gridsearch. Model ID corresponds to Table \ref{tab:modelID}. \textit{Pos. loss} is the MSE of the position of the nodes, \textit{Vel. loss} is the MSE of the velocities of the nodes, \textit{Loss} is the $eta$ combination of the \textit{Pos. loss} and \textit{Vel. loss}.}
+\label{tab:gridsearch_losses}
+\begin{tabular}{|c|c c c|c c c|}
+\hline
+& & Training & & & Validation & \\ 
+\hline
+ID & Pos. Loss & Vel. Loss & Loss & Pos. Loss & Vel. Loss & Loss \\ 
+\hline
+0 & 0.000004 & 0.000175 & 0.000090 & 0.000006 & 0.000062 & 0.000034 \\ 
+\hline
+1 & 0.000055 & 0.000189 & 0.000095 & 0.000109 & 0.000108 & 0.000109 \\ 
+\hline
+2 & 0.000001 & 0.000164 & 0.000082 & 0.000001 & 0.000046 & 0.000024 \\ 
+\hline
+3 & 0.000001 & 0.000167 & 0.000051 & 0.000002 & 0.000054 & 0.000019 \\ 
+\hline
+4 & 0.000007 & 0.000167 & 0.000088 & 0.000037 & 0.000098 & 0.000068 \\ 
+\hline
+5 & 0.000133 & 0.000590 & 0.000270 & 0.003711 & 0.012496 & 0.006347 \\ 
+\hline
+6 & 0.000020 & 0.000207 & 0.000113 & 0.000157 & 0.000251 & 0.000216 \\ 
+\hline
+7 & 0.000017 & 0.000186 & 0.000068 & 0.000715 & 0.000704 & 0.000733 \\ 
+\hline
+\end{tabular}
+\end{table}

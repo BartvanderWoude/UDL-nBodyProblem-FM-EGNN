@@ -33,13 +33,5 @@ python infer.py --model best_model_N70_batch32_lr0.0001_fd4_b0.5.pth --infermeth
 python infer.py --model best_model_N70_batch32_lr0.0001_fd4_b0.5.pth --infermethod dopri5 --lookahead 10 --inferencesteps 12000
 
 # Reset every 100 steps
-python infer.py --model best_model_N70_batch32_lr0.0001_fd4_b0.5.pth --infermethod euler --solverstepsize 0.01 --lookahead 100 --inferencesteps 12000
-python infer.py --model best_model_N70_batch32_lr0.0001_fd4_b0.5.pth --infermethod dopri5 --lookahead 100 --inferencesteps 12000
-
-# touch models/keep.txt
-# touch losses/keep.txt
-# touch infer/keep.txt
-
-# cp models/* /data/UDL/models/
-# cp losses/* /data/UDL/losses/
-# cp infer/* /data/UDL/infer/
+python infer.py --model best_model_N70_batch32_lr0.0001_fd4_b0.5.pth --infermethod euler --solverstepsize 0.01 --lookahead 50 --inferencesteps 12000
+python infer.py --model best_model_N70_batch32_lr0.0001_fd4_b0.5.pth --infermethod dopri5 --lookahead 50 --inferencesteps 12000

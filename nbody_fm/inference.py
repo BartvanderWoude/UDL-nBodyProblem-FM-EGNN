@@ -56,7 +56,12 @@ def infer(vf, dataset, inference_method, inference_steps, output_file, loss_file
 
             # Average coordinates and velocity
             x_avg = (x_node_0 + x_node_1 + x_node_2) / 3
-            # vel_avg = (vel_0[0, 0, :] + vel_0[0, 1, :] + vel_0[0, 2, :]) / 3
+            vel_avg = (vel_0[0, 0, :] + vel_0[0, 1, :] + vel_0[0, 2, :]) / 3
+
+            # Center the coordinates
+            x_node_0 -= x_avg
+            x_node_1 -= x_avg
+            x_node_2 -= x_avg
 
             # Magnitude of the vector between the nodes
             dist_01 = torch.norm(x_node_0 - x_node_1)
@@ -65,9 +70,9 @@ def infer(vf, dataset, inference_method, inference_steps, output_file, loss_file
 
             # Distance origin and average position/ velocity
             dist_avg = torch.norm(x_avg)
-            # dist_vel = torch.norm(vel_avg)
+            dist_vel = torch.norm(vel_avg)
 
-            if dist_01 > max_dist or dist_02 > max_dist or dist_12 > max_dist or dist_avg > max_dist:
+            if dist_01 > max_dist or dist_02 > max_dist or dist_12 > max_dist or dist_avg > max_dist or dist_vel > max_dist:
                 print(f"Unstable configuration at step {i}")
                 break
 
