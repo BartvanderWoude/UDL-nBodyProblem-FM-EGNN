@@ -25,6 +25,10 @@ class EGNN_network(torch.nn.Module):
         GNN_layers = [EGNN_layer(feature_dim=feature_dim) for _ in range(number_of_layers)]
         self.layers = torch.nn.ModuleList(GNN_layers)
 
+        # and this
+        self.conv1 = torch.nn.Conv1d(4, 32, 1)
+        self.conv2 = torch.nn.Conv1d(32, 4, 1)
+
     def forward(self, t, coors, vel):
         if self.use_time_embedding:
             t = self.time_embedding(t)
@@ -39,6 +43,23 @@ class EGNN_network(torch.nn.Module):
         for layer in self.layers:
             _, coors, vel = layer(feats=t, coors=coors, vel=vel, edges=self.edges)
 
+        # make this an optional thing with argument probably
+
+        coors = torch.swapaxes(coors, 1, 2)
+        vel = torch.swapaxes(vel, 1, 2)
+
+        out = torch.concat([coors, vel], dim=1)
+        out = torch.nn.SELU()(out)
+        out = self.conv1(out)
+        out = torch.nn.SELU()(out)
+        out = self.conv2(out)
+
+        coors, vel = out[:, 0:2, :], out[:, 2:4, :]
+
+        coors = torch.swapaxes(coors, 1, 2)
+        vel = torch.swapaxes(vel, 1, 2)
+
+        ###
         return coors, vel
 
 
