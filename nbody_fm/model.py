@@ -49,7 +49,6 @@ class EGNN_network(torch.nn.Module):
         vel = torch.swapaxes(vel, 1, 2)
 
         out = torch.concat([coors, vel], dim=1)
-        out = torch.nn.SELU()(out)
         out = self.conv1(out)
         out = torch.nn.SELU()(out)
         out = self.conv2(out)
