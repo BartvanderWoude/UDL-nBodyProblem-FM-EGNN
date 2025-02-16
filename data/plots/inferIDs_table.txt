@@ -1,0 +1,26 @@
+\begin{table}[H]
+\centering
+\caption{Legend for the inference hyperparameters.}
+\label{tab:inferID}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+ID & Solver method & Solver step size & Look ahead & Inference steps \\ 
+\hline
+0 & dopri5 & 0.01 & 100 & 12000 \\ 
+\hline
+1 & dopri5 & 0.01 & 10 & 12000 \\ 
+\hline
+2 & dopri5 & 0.01 & 1 & 12000 \\ 
+\hline
+3 & dopri5 & 0.01 & 25000 & 25000 \\ 
+\hline
+4 & euler & 0.01 & 100 & 12000 \\ 
+\hline
+5 & euler & 0.01 & 10 & 12000 \\ 
+\hline
+6 & euler & 0.01 & 1 & 12000 \\ 
+\hline
+7 & euler & 0.01 & 25000 & 25000 \\ 
+\hline
+\end{tabular}
+\end{table}

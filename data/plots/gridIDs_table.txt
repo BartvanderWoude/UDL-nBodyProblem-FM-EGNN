@@ -1,0 +1,42 @@
+\begin{table}[H]
+\centering
+\caption{Legend for the gridsearch.}
+\label{tab:modelID}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+ID & Epochs & Batch size & Learning rate & Beta \\ 
+\hline
+0 & 12 & 32 & 0.0001 & 0.5 \\ 
+\hline
+1 & 12 & 32 & 0.0001 & 0.7 \\ 
+\hline
+2 & 12 & 32 & 0.001 & 0.5 \\ 
+\hline
+3 & 12 & 32 & 0.001 & 0.7 \\ 
+\hline
+4 & 12 & 64 & 0.0001 & 0.5 \\ 
+\hline
+5 & 12 & 64 & 0.0001 & 0.7 \\ 
+\hline
+6 & 12 & 64 & 0.001 & 0.5 \\ 
+\hline
+7 & 12 & 64 & 0.001 & 0.7 \\ 
+\hline
+8 & 20 & 32 & 0.0001 & 0.5 \\ 
+\hline
+9 & 20 & 32 & 0.0001 & 0.7 \\ 
+\hline
+10 & 20 & 32 & 0.001 & 0.5 \\ 
+\hline
+11 & 20 & 32 & 0.001 & 0.7 \\ 
+\hline
+12 & 20 & 64 & 0.0001 & 0.5 \\ 
+\hline
+13 & 20 & 64 & 0.0001 & 0.7 \\ 
+\hline
+14 & 20 & 64 & 0.001 & 0.5 \\ 
+\hline
+15 & 20 & 64 & 0.001 & 0.7 \\ 
+\hline
+\end{tabular}
+\end{table}

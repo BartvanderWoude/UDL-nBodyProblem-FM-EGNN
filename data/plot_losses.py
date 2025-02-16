@@ -14,10 +14,12 @@ def plot_losses(losses, y_lim, title, file_name, xlabel='Epoch', ylabel='Loss', 
         else:
             plt.plot(losses[key]['epoch'], losses[key]['loss'], label=legend[key], color=colors[key % 8])
     plt.ylim(0, y_lim)
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
-    plt.title(title)
-    plt.legend()
+    plt.tick_params(axis='both', which='major', labelsize=16)
+    plt.xlabel(xlabel, fontsize=25)
+    plt.ylabel(ylabel, fontsize=25)
+    plt.title(title, fontsize=28)
+    plt.legend(loc="upper left", bbox_to_anchor=(1, 1), fontsize=20)
+    plt.tight_layout()
     # plt.show()
 
     plt.savefig(file_name)
@@ -56,6 +58,14 @@ for i, f in enumerate(val_loss_files):
 mainlosses = {}
 mainlosses[0] = pd.read_csv('losses/loss_N70_batch32_lr0.0001_fd4_b0.5.csv', sep=',', names=['epoch', 'pos_loss', 'vel_loss', 'loss'])
 mainlosses[1] = pd.read_csv('losses/val_N70_batch32_lr0.0001_fd4_b0.5.csv', sep=',', names=['epoch', 'pos_loss', 'vel_loss', 'loss'])
+
+# Set epoch columns to integer
+for key in trainlosses.keys():
+    trainlosses[key]['epoch'] = trainlosses[key]['epoch'].astype(int)
+for key in vallosses.keys():
+    vallosses[key]['epoch'] = vallosses[key]['epoch'].astype(int)
+for key in mainlosses.keys():
+    mainlosses[key]['epoch'] = mainlosses[key]['epoch'].astype(int)
 
 plot_losses(trainlosses, 1.0, 'Training losses', 'plots/training_losses_large.png')
 plot_losses(trainlosses, 0.0025, 'Training losses', 'plots/training_losses_small.png')

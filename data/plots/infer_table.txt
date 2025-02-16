@@ -1,0 +1,28 @@
+\begin{table}[H]
+\centering
+\caption{Table showing the average MSE loss between expected values and predicted values of the inference. \textit{Pos. loss} is the MSE of the position of the nodes, \textit{Vel. loss} is the MSE of the velocities of the nodes, \textit{Loss} is the combination of the \textit{Pos. loss} and \textit{Vel. loss}.}
+\label{tab:inference_losses}
+\begin{tabular}{|c|c c c|c c c|}
+\hline
+& & Full data & & & Test data & \\ 
+\hline
+ID & Pos. Loss & Vel. Loss & Loss & Pos. Loss & Vel. Loss & Loss \\ 
+\hline
+0 & 6515.521215 & 0.051007 & 6515.572241 & 6455.625761 & 0.042342 & 6455.668113 \\ 
+\hline
+1 & 28.316198 & 0.007054 & 28.323252 & 28.430038 & 0.000640 & 28.430678 \\ 
+\hline
+2 & 0.000003 & 0.000257 & 0.000260 & 0.000003 & 0.000017 & 0.000020 \\ 
+\hline
+3 & 17.423168 & 0.000003 & 17.423171 & 13.746041 & 0.000004 & 13.746045 \\ 
+\hline
+4 & 6506.538105 & 0.051002 & 6506.589126 & 6446.894139 & 0.042337 & 6446.936488 \\ 
+\hline
+5 & 27.853319 & 0.007054 & 27.860372 & 27.978828 & 0.000640 & 27.979468 \\ 
+\hline
+6 & 0.000003 & 0.000257 & 0.000259 & 0.000003 & 0.000017 & 0.000020 \\ 
+\hline
+7 & 13.132541 & 0.000002 & 13.132543 & 20.097006 & 0.000004 & 20.097010 \\ 
+\hline
+\end{tabular}
+\end{table}
