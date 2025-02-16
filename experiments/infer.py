@@ -21,7 +21,7 @@ parser.add_argument("--infermethod", type=str, required=True)
 parser.add_argument("--solverstepsize", type=float, required=False, default=0.01)
 parser.add_argument("--lookahead", type=int, required=True)
 parser.add_argument("--inferencesteps", type=int, required=True)
-parser.add_argument("--fulldata", type=bool, required=False, default=False)
+parser.add_argument("--fulldata", action="store_true")
 
 args = parser.parse_args()
 
@@ -49,7 +49,7 @@ NUMBER_OF_LAYERS = 2
 USE_TIME_EMBEDDING = True
 
 # Extract hyperparameters from MODEL_FILE N20_batch32_lr0.0001_fd4_b0.5
-hyperparameters = MODEL_FILE.replace(".pth", "").split("_")
+hyperparameters = MODEL_FILE.replace(".pth", "").replace("best_model_", "").split("_")
 NEPOCHS = [int(x.replace("N", "")) for x in hyperparameters if "N" in x][0]
 BATCH_SIZE = [int(x.replace("batch", "")) for x in hyperparameters if "batch" in x][0]
 LEARNING_RATE = [float(x.replace("lr", "")) for x in hyperparameters if "lr" in x][0]
